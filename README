@@ -10,6 +10,7 @@ Currently tested on Windows and Linux. If you'r a mac user take off
 the platform.system() check in main() and let me know if it workd :)
 
 >>>>> Installation
+
 	pip install -e git://github.com/skinnyp/djan-n-go.git#egg=Package
 
 >>>>> Usage
