@@ -11,7 +11,7 @@ the platform.system() check in main() and let me know if it workd :)
 
 >>>>> Installation
 
-	pip install -e git://github.com/skinnyp/djan-n-go.git#egg=Package
+	pip install git+https://github.com/skinnyp/djan-n-go.git
 
 >>>>> Usage
 
