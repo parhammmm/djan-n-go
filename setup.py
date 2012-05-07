@@ -13,15 +13,15 @@ for dirpath, dirnames, filenames in os.walk(template_dir):
         data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
 
 setup (
-    name='dja-n-go',
+    name='djan-n-go',
     version='0.0.1',
     description='Plain django with all the goodies included',
     long_description=open('README').read(),
     author='Parham Saidi',
     author_email='parham@parha.me',
-    url='https://github.com/skinnyp/dja-n-go',
+    url='https://github.com/skinnyp/djan-n-go',
     data_files = data_files,
-    scripts = ['dja-n-go.py'],
+    scripts = ['djan-n-go.py'],
     license='BSD',
     classifiers=(
         'Intended Audience :: Developers',
