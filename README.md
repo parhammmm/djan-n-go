@@ -8,7 +8,7 @@ Currently tested on Windows and Linux. If you're a mac user take off
 the platform.system() check in main() and let me know if it works :)
 
 ## Installation
-	pip install git+https://github.com/skinnyp/djan-n-go.git
+	pip install -e git+https://github.com/skinnyp/djan-n-go.git#egg=Package
 
 ## Usage
 	djan-n-go.py -n name_of_the_project -b project_root_directory
