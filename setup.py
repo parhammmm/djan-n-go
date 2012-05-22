@@ -16,7 +16,7 @@ setup (
     name='djan-n-go',
     version='0.0.1',
     description='Plain django with all the goodies included',
-    long_description=open('README').read(),
+    long_description=open('README.me').read(),
     author='Parham Saidi',
     author_email='parham@parha.me',
     url='https://github.com/skinnyp/djan-n-go',
