@@ -7,9 +7,6 @@ require([
   "mustache",
 
   // Modules
-  "modules/search",
-  "modules/attire",
-  "modules/searchhistory",
 ],
 
 function(app, $, Backbone, Mustache) {
