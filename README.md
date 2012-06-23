@@ -1,7 +1,7 @@
 #djan-n-go
 
 ## Introduction
-A simple tool for creating a new boilerplate django project (with virtualenv, git, ...) and replicating a current django project together with its dependencies.
+A simple tool for creating a new boilerplate django project (with virtualenv, git, backbone, AMD loader, bootstrap, ...) and replicating a current django project together with its dependencies.
 
 Currently only supports Linux
 
@@ -45,5 +45,7 @@ That's it!
 Author: Parham <http://parha.me>
 
 Directory layout inspired by:
-	
-<http://blog.zacharyvoase.com/2010/02/03/django-project-conventions/>
+<http://blog.zacharyvoase.com/2010/02/03/django-project-conventions>
+
+bootstrap <https://github.com/twitter/bootstrap>
+backbone-boilerplate <https://github.com/tbranyen/backbone-boilerplate>
