@@ -1,31 +1,48 @@
 #djan-n-go
 
 ## Introduction
-A simple tool for creating a new django project (and all the goodies e.g. 
-virtualenv, git, bootstrap, h5bp, ...), with a customised directory layout.
+A simple tool for creating a new boilerplate django project (with virtualenv, git, ...) and replicating a current django project together with its dependencies.
 
-Currently tested on Windows and Linux. If you're a mac user take off
-the platform.system() check in main() and let me know if it works :)
+Currently only supports Linux
+
+## Dependencies
+	You need python2.7, pip and git installed
 
 ## Installation
+
 	pip install -e git+https://github.com/skinnyp/djan-n-go.git#egg=Package
 
 ## Usage
-	djan-n-go.py -n name_of_the_project -b project_root_directory
 
-or follow the onscreen prompts:
+### To create a new project 
 
-	djan-n-go.py
+    djan-n-go.py init 
+
+or if you prefere to pass the arguments directly:
+
+	djan-n-go.py init -n name_of_the_project -b project_directory
+
+### To clone an existing project 
+	
+	djan-n-go.py clone
+
+or if you prefere to pass the arguments directly:
+
+	djan-n-go.py clone -n name_of_the_project -b project_directory -r repository_address
+
+Once you have your project, you must configure django's settings change settings/common.py for development. You also have settings/development.py and settings/production.py settings in the same folder.
 
 ## Some notes
 * Django's manage.py has been altered to force all new apps to be placed in ./apps
 
 * You must activate the virtualenv (in ./virtualenv) for the project before using manage.py or django-admin.py
 
+* You should add your project's dependencies to the requirements.txt so that it can be cloned with ease in the future
+
 That's it!
 
 ## Author & Acknowledgments
-Author: Parham <parham [ a t ] parha.me>
+Author: Parham <http://parha.me>
 
 Directory layout inspired by:
 	
