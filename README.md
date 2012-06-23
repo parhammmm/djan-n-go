@@ -10,7 +10,7 @@ You need python2.7, pip and git installed
 
 ## Installation
 
-	sudo pip install git+https://github.com/skinnyp/djan-n-go.git#egg=Package
+	sudo pip install -e git+https://github.com/skinnyp/djan-n-go.git#egg=Package
 
 ## Usage
 
