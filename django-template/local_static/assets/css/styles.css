@@ -1,0 +1,9 @@
+@import "../vendor/bootstrap/css/bootstrap.css";
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	padding: 60px 0 0 0;
+}
