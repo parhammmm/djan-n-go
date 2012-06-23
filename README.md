@@ -6,7 +6,7 @@ A simple tool for creating a new boilerplate django project (with virtualenv, gi
 Currently only supports Linux
 
 ## Dependencies
-	You need python2.7, pip and git installed
+You need python2.7, pip and git installed
 
 ## Installation
 
@@ -46,4 +46,4 @@ Author: Parham <http://parha.me>
 
 Directory layout inspired by:
 	
-		http://blog.zacharyvoase.com/2010/02/03/django-project-conventions/
+<http://blog.zacharyvoase.com/2010/02/03/django-project-conventions/>
