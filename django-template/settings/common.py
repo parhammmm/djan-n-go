@@ -5,7 +5,8 @@ import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-PROJECT_DIR = '{{ project_directory }}'
+# The path to the parent directory to the current, which is the project directory
+PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
