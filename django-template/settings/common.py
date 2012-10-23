@@ -25,6 +25,8 @@ DATABASES = {
     }
 }
 
+INTERNAL_IPS = ('127.0.0.1')
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -50,6 +52,11 @@ USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
+
+FIXTURE_DIRS = (
+    # The directories where additional fixtures are stores
+    os.path.join(PROJECT_DIR, 'settings', 'fixtures'),
+)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -106,7 +113,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'apps.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'settings.wsgi.application'
@@ -125,11 +132,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.contenttypes',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+# FORCE_LOWERCASE_TAGS = True #Used in django tagging
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
