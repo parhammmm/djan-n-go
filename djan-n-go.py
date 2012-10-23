@@ -9,14 +9,13 @@ import argparse
 import shutil
 
 parser = argparse.ArgumentParser()
-parser.add_argument('action', metavar="action", type=str, choices=['init', 'clone'], help="Init a new project or clone an existing one")
-parser.add_argument('-n', '--name', metavar="project name", help='The name of the new project')
-parser.add_argument('-b', '--base_path', metavar="project folder", help='The base path for the project')
-parser.add_argument('-r', '--repo', metavar="project repository", help='The path to the project repository')
+parser.add_argument('action', metavar="action", type=str, choices=['init'], help="Init a new project")
+parser.add_argument('-n', '--name', metavar="project name", help='Name of the new project')
+parser.add_argument('-b', '--base_path', metavar="project folder", help='Base path for the project')
 args = parser.parse_args()
 
 # The package names in pypi for requriments in the project
-default_requirements = ['django']
+default_requirements = ['django', 'south', 'ssh', 'fabric']
 
 # The list of files and folders to include in the .gitignore configuration
 to_gitignore = ['virtualenv/**', '*.log', '*.pot', '*.pyc', '*.db']
@@ -75,9 +74,6 @@ def git_init(path):
 	subprocess.call(['git', 'add', '.'])
 	subprocess.call(['git', 'commit', '-m', 'First Commit'])
 
-def git_clone(path, repo):
-	subprocess.call(['git', 'clone', repo, path])
-
 def django_configure(path, name, template_path):
 	print('\t>>> Configuring Django...')
 	os.system(os.path.join(get_bin_dir(path), 'django-admin.py')+' startproject --template='+template_path+' '+name+' '+path)
@@ -112,22 +108,6 @@ def project_init(name, base_path):
 	print('>>> Setting up git...')
 	git_init(path)
 
-def project_clone(name, base_path, repo):
-	# The root directory of the project
-	path = os.path.join(os.path.abspath(base_path), name)
-
-	print('>>> Cloning project...')
-	git_clone(path, repo)
-
-	os.chdir(path)
-
-	print('>>> Setting up the virtualenv...')
-	vitualenv_setup(path)
-	virtualenv_activate(path)
-
-	print('>>> Installing requirements...')
-	requirements_install(path)
-
 def project_check_name(name):
 	# Check to see if valid django project name (from django's source)
 	if not re.search(r'^[_a-zA-Z]\w*$', name):
@@ -140,22 +120,6 @@ def project_check_name(name):
 def main():
 	if not platform.system() == "Linux":
 		sys.exit('\tError: Unsupported OS')
-
-	if args.action == "clone":
-		if args.name is None or args.base_path is None or args.repo is None:
-			print("Project Setup")
-			print("-------------")
-			name = read_input("Name: ")
-			project_check_name(name)
-			base_path = read_input("Base Path (. for current directory): ")
-			repo = read_input("Project repo: ")
-		else:
-			name = args.name
-			base_path = args.base_path
-			repo = args.repo
-			project_check_name(name)
-
-		project_clone(name, base_path, repo)
 
 	if args.action == "init":
 		if args.name is None or args.base_path is None:

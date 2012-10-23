@@ -22,14 +22,6 @@ or if you prefere to pass the arguments directly:
 
 	djan-n-go.py init -n name_of_the_project -b project_directory
 
-### To clone an existing project 
-	
-	djan-n-go.py clone
-
-or if you prefere to pass the arguments directly:
-
-	djan-n-go.py clone -n name_of_the_project -b project_directory -r repository_address
-
 Once you have your project, you must configure django's settings change settings/common.py for development. You also have settings/development.py and settings/production.py settings in the same folder.
 
 ## Some notes
