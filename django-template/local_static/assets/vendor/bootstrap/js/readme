@@ -1,0 +1,1 @@
+Put bootstrap plugins in this directory separated into modules, configure dependencies in amd configuration. If there are no dependencies just put the file path in the end of the requirment list in the module where the script is needed.
