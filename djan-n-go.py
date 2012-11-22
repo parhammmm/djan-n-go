@@ -18,7 +18,7 @@ args = parser.parse_args()
 default_requirements = ['django', 'south', 'ssh', 'fabric', 'boto']
 
 # The list of files and folders to include in the .gitignore configuration
-to_gitignore = ['virtualenv/**', '*.log', '*.pot', '*.pyc', '*.db']
+to_gitignore = ['virtualenv/**', '*.log', '*.pot', '*.pyc', '*.db', '.swp']
 
 def is_installed(package_name):
 	""" Check to see if a pip package is installed system wide """
