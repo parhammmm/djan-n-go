@@ -8,16 +8,20 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>{% block title %}Site Title{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
 
-    <meta name="description" content="{% block description %}Site Description{% endblock %}">
-    <meta name="author" content="{% block author %}Site Author{% endblock %}">
-
-    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="author" content="{% block author %}{% endblock %}">
 
     <!-- Le styles -->
+    {% if not is_production %}
+    <script src="{{ STATIC_URL }}assets/js/libs/holder.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/vendor/bootstrap/css/bootstrap.css">	
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/css/styles.css">
-        
+    {% else %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}r/index.css">
+    {% endif %}
+
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -25,6 +29,7 @@
 
 </head>
 <body>
+    {% block header %}{% include 'fragments/header.html' %}{% endblock header %}
     <div role="main" id="main">
         {% block content %}{% endblock content %}
     </div>
