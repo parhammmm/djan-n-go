@@ -167,10 +167,10 @@ def production():
 ############
 
 def deploy():
+	deploy_scripts()
 	pull()
-	migratation_apply()
-	deploy_static()
-	print "You now need to reload Gunicorn using 'kill -HUP <master PID>' the master PID can be found using 'ps aux | less'"
+	migrate()
+	restart_gunicorn()
 
 def migrate():
 	virtualenv('python manage.py migrate')
@@ -181,6 +181,9 @@ def pull():
 
 def deploy_scripts():
 	deploy_static('scripts')
+
+def deploy_in_html():
+	deploy_static('in_html')
 
 def deploy_static(groups=[]):
 	"""
@@ -193,19 +196,19 @@ def deploy_static(groups=[]):
 
 	if not groups:
 		groups = mappings.keys()
+		if not confirm("Also update admin static files? (Not recommended as very slow!)"):
+			groups.remove('admin')
+			groups.remove('grappelli')
 
 	conn = S3Connection(CONFIG['AWS_ACCESS_KEY_ID'], CONFIG['AWS_SECRET_ACCESS_KEY'])
 	bucket = conn.get_bucket(CONFIG['AWS_STORAGE_BUCKET_NAME'])
+	bucket = conn.get_bucket(CONFIG['AWS_STORAGE_BUCKET_NAME'])
 
-	DEFAULTS = {
+DEFAULTS = {
 		'flatten': False,
 	}
 
 	_build_static()
-
-	if not confirm("Also update admin static files? (Not recommended as very slow!)"):
-		groups.remove('admin')
-		groups.remove('grappelli')
 
 	for group in groups:
 		try:
@@ -272,6 +275,18 @@ def run_gunicorn():
 	with cd(_get_project_dir()):
 		virtualenv('python manage.py run_gunicorn --bind 127.0.0.1:%(GUNICORN_PORT)s --workers 2 -D settings/production.py' % CONFIG)
 
+def _get_gunicorn_master_pid():
+	processes = sudo('ps aux | less | grep gunicorn | sed -s "s/root\s*//" | sed -s "s/ .*//g"')
+	return processes.split('\r\n')[0]
+
+def stop_gunicorn():
+	pid = _get_gunicorn_master_pid()
+	sudo('kill %s' % pid)
+
+def restart_gunicorn():
+	pid = _get_gunicorn_master_pid()
+	sudo('kill -HUP %s' % pid)
+
 def restart_postgresql():
 	sudo('/etc/init.d/postgresql restart')
 
@@ -305,6 +320,16 @@ def django_collectstatic():
 
 def django_createsuperuser():
 	virtualenv('python manage.py createsuperuser')
+
+def migration_init():
+	local('python manage.py syncdb')
+	for app in INSTALLED_APPS:
+		if not app.find('apps.'):
+			_app = app.split('apps.')[1]
+			if _app in ['api', 'search', 'landing', 'utils']:
+				continue
+			local('python manage.py convert_to_south %s' % _app)
+			# local('python manage.py schemamigration %s --initial' % _app)
 
 ############
 #### Private functions used in Fabric Tasks
