@@ -15,7 +15,7 @@ parser.add_argument('-b', '--base_path', metavar="project folder", help='Base pa
 args = parser.parse_args()
 
 # The package names in pypi for requriments in the project
-default_requirements = ['django', 'south', 'ssh', 'fabric', 'boto']
+default_requirements = ['django', 'south', 'ssh', 'fabric', 'boto', 'django-storages']
 
 # The list of files and folders to include in the .gitignore configuration
 to_gitignore = ['virtualenv/**', '*.log', '*.pot', '*.pyc', '*.db', '*.swp']
