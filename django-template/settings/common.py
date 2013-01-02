@@ -5,7 +5,7 @@ import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-# The path to the parent directory to the current, which is the project directory
+IS_PRODUCTION = False
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
 ADMINS = (
@@ -82,7 +82,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    PROJECT_DIR+'/local_static',
+    os.path.join(PROJECT_DIR, 'local_static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -113,6 +113,18 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "apps.utils.context_processors.debug_mode",
+    "apps.utils.context_processors.is_production",
+)
+
 ROOT_URLCONF = 'apps.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -122,7 +134,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    PROJECT_DIR+'/templates',
+    os.path.join(PROJECT_DIR, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -140,6 +152,13 @@ INSTALLED_APPS = (
 )
 
 # FORCE_LOWERCASE_TAGS = True #Used in django tagging
+
+# [ Email settings ]
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_TLS = True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
