@@ -1,15 +1,10 @@
 #djan-n-go
 
 ## Introduction
-A simple tool for creating a new boilerplate django project (with virtualenv, git, backbone, AMD loader, bootstrap, ...) and replicating a current django project together with its dependencies.
+A simple tool for creating a new boilerplate django project.
 
 Currently only supports Linux
 
-## Dependencies
-You need python2.7, pip and git installed
-
-## Todo
-* Document fab file usage
 
 ## Installation
 
@@ -25,7 +20,17 @@ or if you prefere to pass the arguments directly:
 
 	djan-n-go.py init -n name_of_the_project -b project_directory
 
-Once you have your project, you must configure django's settings change settings/common.py for development. You also have settings/development.py and settings/production.py settings in the same folder.
+Once you have your project, you must configure django's settings change settings/common.py for development. 
+You also have settings/development.py and settings/production.py settings in the same folder, which must be modified for fabric tasks.
+
+## Fabric Tasks
+
+ * deploy
+ * deploy_admin_static
+ * deploy_static
+ * initial_setup
+ * staging
+ * production
 
 ## Some notes
 * Django's manage.py has been altered to force all new apps to be placed in ./apps
