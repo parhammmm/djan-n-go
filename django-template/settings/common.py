@@ -5,6 +5,9 @@ import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+#the main git repo where the project is hosted
+MAIN_REPO = ''
+
 IS_PRODUCTION = False
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 
@@ -121,8 +124,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "apps.utils.context_processors.debug_mode",
-    "apps.utils.context_processors.is_production",
+    "common.context_processors.debug_mode",
+    "common.context_processors.is_production",
 )
 
 ROOT_URLCONF = 'apps.urls'
@@ -151,6 +154,13 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
+#if django-nose if being used
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+#SOUTH_TESTS_MIGRATE = False
+
+#for use with django comments if it's being used
+#COMMENTS_APP = ''
+
 # FORCE_LOWERCASE_TAGS = True #Used in django tagging
 
 # [ Email settings ]
@@ -159,6 +169,26 @@ INSTALLED_APPS = (
 # EMAIL_HOST_USER = ''
 # EMAIL_HOST_PASSWORD = ''
 # EMAIL_USE_TLS = True
+
+PIPELINE_CSS = {
+	'main': {
+		'source_filenames': (
+			'css/*.css',
+		),
+		'output_filename': 'css/main.min.css',
+	},
+}
+
+PIPELINE_JS = {
+	'main': {
+		'source_filenames': (
+			'js/libs/*.js',
+			'js/plugins/*.js',
+			'js/*.js',
+		),
+		'output_filename': 'js/main.min.js',
+	},
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

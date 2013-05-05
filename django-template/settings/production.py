@@ -7,7 +7,7 @@ IS_PRODUCTION = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                	 # Not used with sqlite3.
@@ -16,7 +16,16 @@ DATABASES = {
     }
 }
 
-# [ Amazon S3 ] - Uncomment if your using S3 in production
+#list of ip addresses where the code should be deployed to
+HOST_IPS = []
+
+#username that has access to the hosts
+HOST_USERNAME = ''
+
+#path to the pem file for the HOST_USERNAME to gain access to the servers
+PEM_KEY_PATH = ''
+
+# [ Amazon S3 ] 
 # S3 bucket URL. Make sure to use a trailing slash.
 # S3_URL = ''
 
@@ -49,7 +58,7 @@ DATABASES = {
 # STATIC_URL = S3_URL+S3_STATIC_PATH
 
 # The path to the S3 storage class - used for handling media files
-# DEFAULT_FILE_STORAGE = 'apps.utils.s3.MediaS3BotoStorage'
+# DEFAULT_FILE_STORAGE = 'common.s3.MediaS3BotoStorage'
 
 # The path to the S3 storage class - used for handling static files
-# STATIC_FILE_STORAGE = 'apps.utils.s3.StaticS3BotoStorage'
+# STATIC_FILE_STORAGE = 'common.s3.StaticS3BotoStorage'

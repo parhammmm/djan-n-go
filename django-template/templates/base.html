@@ -13,14 +13,9 @@
     <meta name="description" content="{% block description %}{% endblock %}">
     <meta name="author" content="{% block author %}{% endblock %}">
 
-    <!-- Le styles -->
-    {% if not is_production %}
-    <script src="{{ STATIC_URL }}assets/js/libs/holder.js"></script>
-	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/vendor/bootstrap/css/bootstrap.css">	
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/css/styles.css">
-    {% else %}
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}r/index.css">
-    {% endif %}
+	<!--<link rel="icon" href="{{ STATIC_URL }}img/favicon.ico" type="image/x-icon" />-->
+
+	{% compressed_css 'main' %}
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -29,15 +24,12 @@
 
 </head>
 <body>
-    {% block header %}{% include 'fragments/header.html' %}{% endblock header %}
+    {% block header %}{% include 'header.html' %}{% endblock header %}
     <div role="main" id="main">
         {% block content %}{% endblock content %}
     </div>
+    {% block header %}{% include 'footer.html' %}{% endblock header %}
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script data-main="{{ STATIC_URL }}app/config" src="{{ STATIC_URL }}assets/js/libs/require.js"></script>
-
+	{% compressed_js 'main' %}
 </body>
 </html>
