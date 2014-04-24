@@ -1,0 +1,8 @@
+django
+south
+ssh
+fabric
+pytz
+boto
+django-storages
+django-pipeline

@@ -1,10 +1,9 @@
 #djan-n-go
 
 ## Introduction
-A simple tool for creating a new boilerplate django project.
+Automation of repetative tasks used when creating a new django project.
 
-Currently only supports Linux
-
+Currently only used on Linux
 
 ## Installation
 
@@ -31,15 +30,6 @@ You also have settings/development.py and settings/production.py settings in the
  * initial_setup
  * staging
  * production
-
-## Some notes
-* Django's manage.py has been altered to force all new apps to be placed in ./apps
-
-* You must activate the virtualenv (in ./virtualenv) for the project before using manage.py or django-admin.py
-
-* You should add your project's dependencies to the requirements.txt so that it can be cloned with ease in the future
-
-That's it!
 
 ## Author & Acknowledgments
 Author: Parham <http://parha.me>

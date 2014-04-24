@@ -1,3 +1,4 @@
+{% load compressed %}
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
@@ -15,8 +16,8 @@
 
 	<!--<link rel="icon" href="{{ STATIC_URL }}img/favicon.ico" type="image/x-icon" />-->
 
-	{% compressed_css 'main' %}
-
+	{% block stylesheets %}{% compressed_css 'main' %}{% endblock stylesheets %}
+	
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -25,11 +26,10 @@
 </head>
 <body>
     {% block header %}{% include 'header.html' %}{% endblock header %}
-    <div role="main" id="main">
+    <div role="main" id="main" class="container">
         {% block content %}{% endblock content %}
     </div>
-    {% block header %}{% include 'footer.html' %}{% endblock header %}
-
-	{% compressed_js 'main' %}
+    {% block footer %}{% include 'footer.html' %}{% endblock footer %}
+	{% block scripts %}{% compressed_js 'main' %}{% endblock scripts %}
 </body>
 </html>

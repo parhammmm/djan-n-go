@@ -1,5 +1,7 @@
 from common import *
-from os import path
+import os
+
+DOMAIN = 'localhost:8080'
 
 DATABASES = {
     'default': {
@@ -7,5 +9,9 @@ DATABASES = {
         'NAME': os.path.join(PROJECT_DIR, 'development.db')
     }
 }
+
+ALLOWED_HOSTS = [
+    '*'
+]
 
 DEBUG = True

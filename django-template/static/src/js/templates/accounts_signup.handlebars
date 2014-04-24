@@ -1,0 +1,26 @@
+<form method="{{form.method}}" action="{{form.action}}" class="row">
+	<input type="hidden" name="csrfmiddlewaretoken" value="{{csrf}}"/>
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-6">
+				<input name="first_name" maxlength="1024" type="text" placeholder="Your First Name" required />
+			</div>
+			<div class="col-md-6">
+				<input name="last_name" maxlength="1024" type="text" placeholder="Your Last Name" required />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<input type="email" value="" required />
+				<input name="username" maxlength="1024" type="text" placeholder="Pick a Username" required />
+				<input name="password1" maxlength="1024" type="password" placeholder="Password" required />
+				<input name="password2" maxlength="1024" type="password" placeholder="Confirm Password" required />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3 pull-right">
+				<input class="btn btn-custom" name="signup" type="submit" value="Save" />
+			</div>
+		</div>
+	</div>
+</form>

@@ -1,60 +1,61 @@
-import os, glob, boto, multiprocessing
+import os, boto, multiprocessing, gzip
 from fabric.api import cd, sudo, run, env
 from boto.s3.key import Key
-from settings import common
+from settings.common import AWS_KEY_FILENAME, PROJECT_DIR, STATIC_ROOT, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 
 CONFIG = {
-	'SITE_NAME': '{{ project_name }}',
-	'INSTALL_DIR': common.PROJECT_DIR, 
-	'REPO': common.MAIN_REPO, 
+	'SITE_NAME': '{{project_name}}',
+	'INSTALL_DIR': PROJECT_DIR, 
+	'REPO': '',
 	'GUNICORN_PORT': 8000,
+	'PRODUCTION_HOSTS': [''],
 }
 
-def staging():
-	from settings import staging
-	_set_host_config(staging)
+AWS_STORAGE_BUCKET_NAME = ''
 
 def production():
-	from settings import production
-	_set_host_config(production)
-
-def _set_host_config(config):
-	env.user = config.HOST_USERNAME 
-	env.hosts = config.HOST_IPS 
-	env.key_filename = [
-		config.PEM_KEY_PATH
+	env.user = 'ubuntu' 
+	env.hosts = CONFIG['PRODUCTION_HOSTS']
+	env.key_filename = [	
+		AWS_KEY_FILENAME
 	]
 	env.forward_agent = True
-	env['static_root'] = config.STATIC_ROOT
-	env['aws_key'] = config.AWS_ACCESS_KEY_ID
-	env['aws_secret'] = config.AWS_SECRET_ACCESS_KEY
-	env['aws_s3bucket'] = config.AWS_STORAGE_BUCKET_NAME
 
 def deploy():
 	with cd(CONFIG['INSTALL_DIR']):
+		run('git checkout master') 
 		run('git pull origin master') 
-		virtualenv('pip install -r requirements.txt')
+		#virtualenv('pip install -r requirements.txt')
 		virtualenv('python manage.py migrate')
 		virtualenv('python manage.py collectstatic')
 		virtualenv('fab deploy_static')
+		restart_app()
+
+def pull():
+	with cd(CONFIG['INSTALL_DIR']):
+		run('git pull origin master') 
 
 def deploy_admin_static():
-	_deploy_folder(os.path.join(env.static_root, 'admin'))
+	_deploy_folder(os.path.join(STATIC_ROOT, 'admin'))
 
 def deploy_static():
 	print 'locating files'
-	paths = []
 	dirs = [
-		os.path.join(env.static_root, 'js'),
-		os.path.join(env.static_root, 'css'),
-		os.path.join(env.static_root, 'img'),
+		os.path.join(STATIC_ROOT, 'js'),
+		os.path.join(STATIC_ROOT, 'css'),
+		os.path.join(STATIC_ROOT, 'img'),
+		os.path.join(STATIC_ROOT, 'vendor'),
 	]
 	for dir in dirs:
-		for file in glob.glob(os.path.join(dir, '*')):
-			if os.path.isfile(file):
-				paths.append((file, dir))
+		_deploy_folder(dir)
 
-	_upload_files(paths, 10)
+def add_rank_cron():
+	_add_cron('rank')
+
+def _add_cron(command):
+	entry = '*/5 * * * * %s/virtualenv/bin/python %s/manage.py %s --settings=%s' % (CONFIG['INSTALL_DIR'], CONFIG['INSTALL_DIR'], command, 'settings.production')
+	append = 'crontab -l | { cat; echo "%s"; } | crontab -' % entry
+	sudo(append)
 
 def initial_setup():
 	sudo('apt-get update')
@@ -70,8 +71,12 @@ def initial_setup():
 
 	setup_nginx()
 
+def restart_app():
+	sudo('supervisorctl stop all')
+	sudo('supervisorctl start all')
+
 def stop_gunicorn():
-	sudo("ps auxww | grep gunicorn | awk '{print $2}' | xargs kill -9")
+	sudo("pkill -9 -f gunicorn")
 
 def start_gunicorn():
 	with cd(CONFIG['INSTALL_DIR']):
@@ -110,14 +115,17 @@ def _deploy_folder(path, parallel_upload = 20):
 def _upload_files(paths, parallel_upload):
 	buckets = []
 	print 'opening connections'
+
+	sysname, nodename, release, version, machine = os.uname()
+
 	for i in range(parallel_upload):
-		connection = boto.connect_s3(env.aws_key, env.aws_secret) 
-		bucket = connection.get_bucket(env.aws_s3bucket) 
+		connection = boto.connect_s3(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY) 
+		bucket = connection.get_bucket(AWS_STORAGE_BUCKET_NAME) 
 		buckets.append(bucket)
 
 	def chunks(l, n):
 		for i in xrange(0, len(l), n):
-				yield l[i:i + n]
+				yield l[i:i+n]
 	chunked_paths = chunks(paths, parallel_upload)
 	print 'uploading'
 	for chunk in chunked_paths:
@@ -125,7 +133,7 @@ def _upload_files(paths, parallel_upload):
 		i = 0
 		for path in chunk:
 			bucket = buckets[i % parallel_upload]
-			p = multiprocessing.Process(target=_s3_put, args=(bucket,) + path)
+			p = multiprocessing.Process(target=_s3_put, args=(bucket,)+path)
 			p.start()
 			ps.append(p)
 			i += 1
@@ -136,11 +144,30 @@ def _upload_files(paths, parallel_upload):
 def _s3_put(bucket, file, path):
 	k = Key(bucket) 
 	relpath = os.path.relpath(os.path.join(path, file)) 
+	localpath = relpath
+	filepath, ext = os.path.splitext(localpath)
+	headers = {}
+	if ext in ['.js', '.css']:
+		headers['Content-Encoding'] = 'gzip'
+		localpath = _gzip(file, path)
 
 	k.key = relpath
-	k.set_contents_from_filename(relpath)
+	k.set_contents_from_filename(localpath, headers=headers)
 	try:
 		k.set_acl('public-read')
 		print 'sent...', relpath
 	except:
 		print 'failed...', relpath
+
+def _gzip(file, path):
+	temp_dir = "temp"
+	gzip_path = '%s/%s' % (temp_dir, file)
+	fullpath = os.path.join(path, file)
+
+	f_in = open(fullpath, 'rb').read()
+	if not os.path.exists(temp_dir):
+		os.makedirs(temp_dir)
+	f_out = gzip.open(gzip_path, 'wb')
+	f_out.write(f_in)
+	f_out.close()
+	return gzip_path 
